@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nutrients Prediction in Food</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Nutrients Prediction in Food</h1>
+        <form id="prediction-form" action="/predict" method="post">
+            <label for="food-item">Food Item:</label>
+            <input type="text" id="food-item" name="food-item" required>
+            <button type="submit">Predict</button>
+        </form>
+        <div id="result">
+            <!-- The prediction result will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // Handle form submission and display result
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            fetch(event.target.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                if (data.error) {
+                    resultDiv.innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p>Carbohydrates: ${data.Carbohydrates}</p><p>Fats: ${data.Fats}</p><p>Proteins: ${data.Proteins}</p>`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
